@@ -168,37 +168,22 @@ EOD;
 /////////////////////////////////////////////////////////////////////////
 // Creating the HTML Section for Movie Reviews
 /////////////////////////////////////////////////////////////////////////
-$idMovie=$_GET['movie_id'];
+
 
 $review_table_headings=<<<EOD
 <tr bgcolor="lightgrey">
-<th><a href="movie_details.php?sort_by=review_date&movie_id=$idMovie">Date of Review</a></th>
-<th><a href="movie_details.php?sort_by=review_name&movie_id=$idMovie">Review Title</a></th>
-<th><a href="movie_details.php?sort_by=review_reviewer_name&movie_id=$idMovie">Reviewer Name</a></th>
-<th><a href="movie_details.php?sort_by=review_comment&movie_id=$idMovie">Movie Review Comments</a></th>
-<th><a href="movie_details.php?sort_by=review_rating&movie_id=$idMovie">Rating</a></th>
+<th>Date of Review</th>
+<th>Review Title</th>
+<th>Reviewer Name</th>
+<th>Movie Review Comments</th>
+<th>Rating</th>
 </tr>
 EOD;
 
-// Starting the ordering selection criteria for Movie Review
-if (isset($_GET['sort_by']))
-{
-	if (($_GET['sort_by'] == "review_date") OR ($_GET['sort_by'] == "review_rating"))
-		$order_by_clause =  " ORDER BY " .$_GET['sort_by']. " DESC";
-	else 
-		$order_by_clause =  " ORDER BY " .$_GET['sort_by']. " ASC";
-}else
-{
-	$order_by_clause = "";
-}
 
 $review_query = "SELECT * FROM reviews " .
-				"WHERE review_movie_id ='" . $_GET['movie_id'] . "'" . $order_by_clause;
-
-
-//$review_query = "SELECT * FROM reviews " .
-//				"WHERE review_movie_id ='" . $_GET['movie_id'] . "' " .
-//				"ORDER BY review_rating ASC";
+				"WHERE review_movie_id ='" . $_GET['movie_id'] . "' " .
+				"ORDER BY review_date DESC";
 
 $review_result = mysql_query($review_query, $link)
 	or die(mysql_error());

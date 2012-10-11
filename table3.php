@@ -21,7 +21,7 @@ $num_movies = mysql_num_rows($result);
 $movie_header =<<<EOD
 	<h2><center>Movie Review Database</center></h2>
 	<table width="70%" border="1" cellpadding="2" cellspacing="2" align="center">
-		<tr>
+		<tr bgcolor="lightgrey">
 		<th>Movie Title</th>
 		<th>Movie Director</th>
 		<th>Movie Lead Actor</th>

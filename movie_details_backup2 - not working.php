@@ -94,14 +94,14 @@ function generate_ratings($review_rating)
 
 
 $movie_table_headings=<<<EOD
-<tr bgcolor="lightgrey">
+<tr>
 <th>Movie Title</th>
 <th>Year of Release</th>
 <th>Movie Director</th>
 <th>Movie Lead Actor</th>
 <th>Movie Running Time</th>
 <th>Movie Health</th>
-<th>Average Rating<BR>0 (Very Bad) -- 5 (Excellent)</th>
+<th>Average Rating</th>
 </tr>
 EOD;
 
@@ -129,81 +129,30 @@ while ($row = mysql_fetch_array($movie_result))
 	get_leadactor();
 }
 
-$movie_health = calculate_differences($movie_takings, $movie_cost);
-
-// Calculating Movie General Rating
-
-// Preparing SQL Statement
-$avgRating_query = "SELECT sum(review_rating) / count(*) as AvgRating FROM reviews " 				.
-		 "WHERE review_movie_id ='" . $_GET['movie_id'] . "'";
-
-$avgRating_result = mysql_query($avgRating_query, $link)
-	or die(mysql_error());
-
-$row_count = mysql_fetch_assoc($avgRating_result);
-$movie_average_rate = $row_count['AvgRating'];
-
-$movie_details =<<<EOD
-<table width="70%" border="1" cellspacing="2" cellpadding="2" align="center">
-<tr>
-	<th bgcolor="grey" colspan="7"><u><h2>$movie_name: Details</h2></u></th>
-</tr>
-$movie_table_headings
-<tr>
-	<td width="33%" align="center">$movie_name</td>
-	<td align="center">$movie_year</td>
-	<td align="center">$director</td>
-	<td align="center">$leadactor</td>
-	<td align="center">$movie_running_time</td>
-	<td align="center">$movie_health</td>
-	<td align="center">$movie_average_rate</td>
-</tr>
-</table>
-<br>
-<br>
-EOD;
-
-
-
 /////////////////////////////////////////////////////////////////////////
 // Creating the HTML Section for Movie Reviews
 /////////////////////////////////////////////////////////////////////////
-$idMovie=$_GET['movie_id'];
+
 
 $review_table_headings=<<<EOD
-<tr bgcolor="lightgrey">
-<th><a href="movie_details.php?sort_by=review_date&movie_id=$idMovie">Date of Review</a></th>
-<th><a href="movie_details.php?sort_by=review_name&movie_id=$idMovie">Review Title</a></th>
-<th><a href="movie_details.php?sort_by=review_reviewer_name&movie_id=$idMovie">Reviewer Name</a></th>
-<th><a href="movie_details.php?sort_by=review_comment&movie_id=$idMovie">Movie Review Comments</a></th>
-<th><a href="movie_details.php?sort_by=review_rating&movie_id=$idMovie">Rating</a></th>
+<tr>
+<th>Date of Review</th>
+<th>Review Title</th>
+<th>Reviewer Name</th>
+<th>Movie Review Comments</th>
+<th>Rating</th>
 </tr>
 EOD;
 
-// Starting the ordering selection criteria for Movie Review
-if (isset($_GET['sort_by']))
-{
-	if (($_GET['sort_by'] == "review_date") OR ($_GET['sort_by'] == "review_rating"))
-		$order_by_clause =  " ORDER BY " .$_GET['sort_by']. " DESC";
-	else 
-		$order_by_clause =  " ORDER BY " .$_GET['sort_by']. " ASC";
-}else
-{
-	$order_by_clause = "";
-}
 
 $review_query = "SELECT * FROM reviews " .
-				"WHERE review_movie_id ='" . $_GET['movie_id'] . "'" . $order_by_clause;
-
-
-//$review_query = "SELECT * FROM reviews " .
-//				"WHERE review_movie_id ='" . $_GET['movie_id'] . "' " .
-//				"ORDER BY review_rating ASC";
+				"WHERE review_movie_id ='" . $_GET['movie_id'] . "' " .
+				"ORDER BY review_date DESC";
 
 $review_result = mysql_query($review_query, $link)
 	or die(mysql_error());
 
-
+$movie_health = calculate_differences($movie_takings, $movie_cost);
 
 while($review_row = mysql_fetch_array($review_result)) 
 {
@@ -215,25 +164,12 @@ while($review_row = mysql_fetch_array($review_result))
 	$review_rating[] = generate_ratings($review_row['review_rating']);
 }
 
-
-
 $i = 0;
 $review_details = '';
 while ($i<sizeof($review)) 
 {
-	 if (($i % 2) == 0)
-	 {
-	 	// Odd Number
-	 	$ColorBackground = '#D4ED91';
-
-	 } else
-	 {
-	 	// Even Number
-	 	$ColorBackground = '#D1EEEE';
-	 }
-
 $review_details .=<<<EOD
-<tr bgcolor="$ColorBackground">
+<tr>
 <td width="15%" valign="top" align="center">$review_date[$i]</td>
 <td width="15%" valign="top">$review_title[$i]</td>
 <td width="10%" valign="top">$reviewer_name[$i]</td>
@@ -259,7 +195,25 @@ $page_start =<<<EOD
 <body>
 EOD;
 
-
+$movie_details =<<<EOD
+<table width="70%" border="1" cellspacing="2" cellpadding="2" align="center">
+<tr>
+	<th colspan="7"><u><h2>$movie_name: Details</h2></u></th>
+</tr>
+$movie_table_headings
+<tr>
+	<td width="33%" align="center">$movie_name</td>
+	<td align="center">$movie_year</td>
+	<td align="center">$director</td>
+	<td align="center">$leadactor</td>
+	<td align="center">$movie_running_time</td>
+	<td align="center">$movie_health</td>
+	<td align= "center"></td>
+</tr>
+</table>
+<br>
+<br>
+EOD;
 
 if ($review_flag) 
 {
