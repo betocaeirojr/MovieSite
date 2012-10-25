@@ -1,5 +1,5 @@
 <?php
-	$link = mysql_connect("localhost","root","")
+	$link = mysql_connect("localhost","root","root")
 		or die(mysql_error());
 	
 	mysql_select_db("moviesite")
@@ -214,7 +214,6 @@ while($review_row = mysql_fetch_array($review_result))
 	$review_date[] = $review_row['review_date'];
 	$review_rating[] = generate_ratings($review_row['review_rating']);
 }
-
 
 
 $i = 0;

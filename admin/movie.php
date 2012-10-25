@@ -1,4 +1,7 @@
 <?php
+	
+	date_default_timezone_set('America/Sao_Paulo');
+
 	$link = mysql_connect("localhost", "root", "root")
 		or die("Could not connect: " . mysql_error());
 
@@ -28,6 +31,8 @@
 			$movie_year = $row['movie_year'];
 			$movie_leadactor = $row['movie_leadactor'];
 			$movie_director = $row['movie_director'];
+			$movie_release = $row['movie_release'];
+			$movie_rating = $row['movie_rating'];
 			break;
 		
 		default:
@@ -36,6 +41,9 @@
 			$movie_year = "";
 			$movie_leadactor = "";
 			$movie_director = "";
+			$movie_release = time();
+			$movie_rating = "5";
+
 			break;
 	}
 ?>
@@ -51,13 +59,29 @@
 	<body>
 		<h1> Welcome to Movie Review Database Admin Site </h1>
 		<form action="commit.php?action=<?php echo $_GET['action']; ?>&type=movie&id=<?php echo $_GET['id']; ?>" method="post">
+		
+			<!-- Inserting Validation Code From Chapter 8 -->
+			<?php
+				if (!empty($_GET['error'])) { 
+					echo "<div align=\"center\" " . 
+					"style=\"color:#FFFFFF;background-color:#FF0000;" .
+					"font-weight:bold\">" . nl2br(urldecode($_GET['error'])) .
+					"</div><br>";
+				}
+			?>
+
+			<!-- ================Iniciando TABLE ========================== -->
 			<table border="0" width="750" cellspacing="1" cellpadding="3" bgcolor="#353535" align="center">
+				
+				<!-- ================ MOVIE NAME ====================== -->
 				<tr>
 					<td bgcolor="#FFFFFF" width="30%">Movie Name</td>
 					<td bgcolor="#FFFFFF" width="70%">
 						<input type="text" name="movie_name" value="<?php echo $movie_name; ?>">
 					</td>
 				</tr>
+				
+				<!-- ================ MOVIE TYPE ====================== -->
 				<tr>
 					<td bgcolor="#FFFFFF">Movie Type</td>
 					<td bgcolor="#FFFFFF">
@@ -82,6 +106,8 @@
 						</select>
 					</td>
 				</tr>
+
+				<!-- ================ MOVIE YEAR ====================== -->
 				<tr>
 					<td bgcolor="#FFFFFF">Movie Year</td>
 					<td bgcolor="#FFFFFF">
@@ -106,6 +132,8 @@
 						</select>
 					</td>
 				</tr>
+
+				<!-- ================ MOVIE LEAD ACTOR ====================== -->
 				<tr>
 					<td bgcolor="#FFFFFF">Lead Actor</td>
 					<td bgcolor="#FFFFFF">
@@ -129,6 +157,8 @@
 					</select>
 					</td>
 				</tr>
+
+				<!-- ================ MOVIE DIRECTOR ====================== -->
 				<tr>
 					<td bgcolor="#FFFFFF">Director</td>
 					<td bgcolor="#FFFFFF">
@@ -151,6 +181,22 @@
 
 ?>
 						</select>
+					</td>
+				</tr>
+
+				<!-- ================ MOVIE RELEASED DATE ====================== -->
+				<tr>
+					<td bgcolor="#FFFFFF" width="30%">Movie Released Date (dd-mm-yyyy)</td>
+					<td bgcolor="#FFFFFF" width="70%">
+						<input type="input" name="movie_release" value="<?php echo date("d-m-Y",$movie_release); ?>">
+					</td>
+				</tr>
+				
+				<!-- ================ MOVIE RATING ====================== -->
+				<tr>
+					<td bgcolor="#FFFFFF">Movie Rating (0 to 10) </td>
+					<td bgcolor="#FFFFFF">
+						<input type="text" name="movie_rating" value="<?php echo $movie_rating; ?>">
 					</td>
 				</tr>
 				<tr>

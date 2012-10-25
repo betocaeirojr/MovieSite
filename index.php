@@ -1,14 +1,8 @@
 <?php
-// Connect to MySQL
-$link = mysql_connect("localhost","root","")
-	or die(mysql_error());
-
-// Select the DB to connect
-mysql_select_db("moviesite")
-	or die (mysql_error());
+include "admin/connect_to_db.php";
 
 // Preparing the SQL Statement
-$query = 	"SELECT movie_name, movie_director, movie_leadactor " .
+$query = 	"SELECT movie_id, movie_name, movie_director, movie_leadactor, movie_year " .
 			"FROM movie";
 
 // Run the Query
@@ -19,12 +13,17 @@ $result = mysql_query($query)
 $num_movies = mysql_num_rows($result);
 
 $movie_header =<<<EOD
-	<h2><center>Movie Review Database</center></h2>
+	<html>
+	<head><title>Movie Review Portal</title></head>
+	<body>
+	<h1><center>Welcome to our Movie Review Portal </center></h1>
+	<h2><center>Please check our database below</center></h2>
 	<table width="70%" border="1" cellpadding="2" cellspacing="2" align="center">
-		<tr>
+		<tr bgcolor="lightgrey">
 		<th>Movie Title</th>
 		<th>Movie Director</th>
 		<th>Movie Lead Actor</th>
+		<th>Movie Year</th>
 		</tr>
 EOD;
 
@@ -64,6 +63,7 @@ function get_leadactor()
 	extract($row_a);
 	
 	$leadactor = $people_fullname;
+	
 }
 
 
@@ -71,8 +71,10 @@ $movie_details = '';
 while ($row = mysql_fetch_array($result)) 
 {
 	$movie_name = $row['movie_name'];
+	$movie_id = $row['movie_id'];
 	$movie_director = $row['movie_director'];
 	$movie_leadactor = $row['movie_leadactor'];
+	$movie_year = $row['movie_year'];
 
 	//get director’s name from people table
 	get_director();
@@ -82,23 +84,25 @@ while ($row = mysql_fetch_array($result))
 
 	$movie_details .=<<<EOD
 	<tr>
-	<td>$movie_name</td>
+	<td><a href="movie_details.php?movie_id=$movie_id"
+		title="Find out more about $movie_name">$movie_name</td>
 	<td>$director</td>
 	<td>$leadactor</td>
+	<td>$movie_year</td>
 	</tr>
 EOD;
 }
 
 $movie_details .=<<<EOD
 <tr align='center'>
-<td colspan='3'>&nbsp;</td>
+<td colspan='4'>&nbsp;</td>
 </tr>
 <tr align='center'>
-<td colspan='3'>Total: $num_movies Movies</td>
+<td colspan='4'>Total: $num_movies Movies</td>
 </tr>
 EOD;
 
-$movie_footer = "</table>";
+$movie_footer = "</table></body></html>";
 
 $movie =<<<MOVIE
 	$movie_header
@@ -108,5 +112,5 @@ MOVIE;
 
 echo "There are $num_movies movies in our database";
 echo $movie;
-
+mysql_free_result($result);
 ?>

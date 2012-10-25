@@ -2,7 +2,7 @@
 <font size="1">
 <br>
 <?php
-	echo date(Y) . ". All rights reserved.<BR>";
+	echo date("Y") . ". All rights reserved.<BR>";
 	echo "This site has been developed by ";
 	echo "<a href=\"mailto:betocaeirojr@gmail.com\"> Alberto Caeiro Jr</a>";
 

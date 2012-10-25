@@ -1,9 +1,12 @@
 <?php
-	$link = mysql_connect("localhost", "root", "root")
-		or die("Could not connect: " . mysql_error());
-	
-	mysql_select_db('moviesite', $link)
-		or die(mysql_error());
+	session_start();
+
+	if (!((isset($_SESSION['auth_user'])) && ($_SESSION['auth_user'] == true))) 
+	{
+		$error="Please+log+in%21%0D%0A";
+		header("location:login.php?error=$error");
+	} 
+	include "connect_to_db.php";
 ?>
 
 <html>
@@ -59,5 +62,6 @@
 		mysql_free_result($result);
 	?>
 		</table>
+		<br><p align="left"><a href="logout.php">logout</a></p>
 	</body>
 </html>
