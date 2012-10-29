@@ -1,9 +1,9 @@
 <?php
-	$link = mysql_connect("localhost","root","root")
-		or die(mysql_error());
-	
-	mysql_select_db("moviesite")
-		or die (mysql_error());
+	include "admin/connect_to_db.php";
+
+	date_default_timezone_set('America/Sao_Paulo');
+
+	$dtToday = date("Y-m-d");
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -271,6 +271,28 @@ EOD;
 }
 
 $page_end =<<<EOD
+<form action="process_review.php" method="post">
+<table width="95%" border="1" align="center">
+<tr>
+<td width="15%"><input type="text" name="review_date" size="12" value="$dtToday"></input></td>
+<td width="15%"><input type="text" name="review_title" size="20" value="Review Title"></input></td>
+<td width="10%"><input type="text" name="reviewer_name" size="20" value="Reviewer Name"></input></td>
+<td width="50%"><input type="text" name="review_comments" size="50" value="Please give us your review for this movie"></input></td>
+<td width="10%" align="center"> 
+<select name="review_rating">
+<option value="1" selected>1 - Awful</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5 - Amazing</option>
+</select></td>
+</tr>
+<tr>
+<td colspan="6" align="right"> <input type="hidden" name="movie_id" value="$idMovie"></input> <input type="submit" name="submit" value="Submit">&nbsp;&nbsp;&nbsp;&nbsp;</input></td>
+</tr>
+</table>
+</form>
+<a href="index.php"><center>Back to Home</center></a>
 </body>
 </html>
 EOD;
